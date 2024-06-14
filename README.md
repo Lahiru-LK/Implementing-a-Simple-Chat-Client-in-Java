@@ -1,4 +1,11 @@
 Implementing a Simple Chat Client in Java 😊💻
+
+
+https://github.com/Lahiru-LK/Implementing-a-Simple-Chat-Client-in-Java/assets/104630433/38aeef37-8cf5-4947-96cc-712de92fcbd4
+
+![Screenshot 2024-06-14 121600](https://github.com/Lahiru-LK/Implementing-a-Simple-Chat-Client-in-Java/assets/104630433/a19790b4-9b8f-468b-8ec1-e27f9f02ef2c)
+
+
 Introduction to Networking in Java 🌐
 Overview of Java Networking APIs:
 
