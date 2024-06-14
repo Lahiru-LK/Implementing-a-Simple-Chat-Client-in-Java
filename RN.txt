@@ -1,0 +1,286 @@
+Client-Server Communication Using Sockets
+/////////////Server Code
+
+import java.io.*;
+import java.net.*;
+
+public class Server {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(5000)) {
+            System.out.println("Server started and waiting for clients...");
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected");
+
+            // Input stream to receive data from client
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            // Output stream to send data to client
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            String message;
+            while ((message = input.readLine()) != null) {
+                System.out.println("Received from client: " + message);
+                output.println("Server response: " + message);
+            }
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Client Code:
+import java.io.*;
+import java.net.*;
+
+public class Client {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 5000)) {
+            // Output stream to send data to server
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            // Input stream to receive data from server
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            // Input stream to read data from the console
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                output.println(userInput);
+                System.out.println("Server response: " + input.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+///////////////////////////////////////////////////
+Using URL and URI Classes to Fetch Data from a Web Server
+import java.io.*;
+import java.net.*;
+
+public class URLExample {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://www.example.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
+            }
+
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+/////////////////////////////////////
+TCP/UDP Communication
+TCP Server:
+import java.io.*;
+import java.net.*;
+
+public class TCPServer {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(5000)) {
+            System.out.println("TCP Server started and waiting for clients...");
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected");
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            String message;
+            while ((message = input.readLine()) != null) {
+                System.out.println("Received from client: " + message);
+                output.println("Server response: " + message);
+            }
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+TCP Client:
+import java.io.*;
+import java.net.*;
+
+public class TCPClient {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 5000)) {
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                output.println(userInput);
+                System.out.println("Server response: " + input.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+UDP Server:
+
+import java.net.*;
+
+public class UDPServer {
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket(5000)) {
+            byte[] buffer = new byte[256];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+            System.out.println("UDP Server started and waiting for packets...");
+            socket.receive(packet);
+
+            String received = new String(packet.getData(), 0, packet.getLength());
+            System.out.println("Received from client: " + received);
+
+            InetAddress address = packet.getAddress();
+            int port = packet.getPort();
+            String response = "Server response: " + received;
+            packet = new DatagramPacket(response.getBytes(), response.getBytes().length, address, port);
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+UDP Client:
+import java.net.*;
+import java.io.*;
+
+public class UDPClient {
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket()) {
+            InetAddress address = InetAddress.getByName("localhost");
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                byte[] buffer = userInput.getBytes();
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, 5000);
+                socket.send(packet);
+
+                packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+
+                String received = new String(packet.getData(), 0, packet.getLength());
+                System.out.println("Server response: " + received);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+///////////////////////////
+UDP Socket Programming
+TCP Socket Programming
+TCP Server:
+import java.io.*;
+import java.net.*;
+
+public class TCPServer {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(5000)) {
+            System.out.println("TCP Server started and waiting for clients...");
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected");
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            String message;
+            while ((message = input.readLine()) != null) {
+                System.out.println("Received from client: " + message);
+                output.println("Server response: " + message);
+            }
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+TCP Client:
+import java.io.*;
+import java.net.*;
+
+public class TCPClient {
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("localhost", 5000)) {
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                output.println(userInput);
+                System.out.println("Server response: " + input.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+UDP Server:
+import java.net.*;
+
+public class UDPServer {
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket(5000)) {
+            byte[] buffer = new byte[256];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+            System.out.println("UDP Server started and waiting for packets...");
+            socket.receive(packet);
+
+            String received = new String(packet.getData(), 0, packet.getLength());
+            System.out.println("Received from client: " + received);
+
+            InetAddress address = packet.getAddress();
+            int port = packet.getPort();
+            String response = "Server response: " + received;
+            packet = new DatagramPacket(response.getBytes(), response.getBytes().length, address, port);
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+UDP Client:
+import java.net.*;
+import java.io.*;
+
+public class UDPClient {
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket()) {
+            InetAddress address = InetAddress.getByName("localhost");
+            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                byte[] buffer = userInput.getBytes();
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, 5000);
+                socket.send(packet);
+
+                packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
+
+                String received = new String(packet.getData(), 0, packet.getLength());
+                System.out.println("Server response: " + received);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
